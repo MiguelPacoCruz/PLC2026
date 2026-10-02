@@ -1,20 +1,24 @@
 import re
 import sys
 
+bold = re.compile(r"\*{2}(.*?)\*{2}")
+italic = re.compile(r"\*{1}(.*?)\*{1}")
+link = re.compile(r"([^!])\[(?P<texto>.*)\]\((?P<url>[\w\/:\.]*)\)")
+image = re.compile(r"!\[(?P<texto>.*)\]\((?P<url>[\w\/:\.]*)\)")
 header = re.compile(r"#\w")
-bold = re.compile(r"\*{2}\w*\*{2}")
-italic = re.compile(r"\*\*\w*\*\*")
 numlist = re.compile(r"^\d\.[\w ,.]*")
-link = re.compile(r"(\[.*\])(\([\w\/:\.]*\))")
-image = re.compile(r"(.*)(!\[.*\])(\([\w\/:\.]*\))")
 
 def markdown_to_html(text):
-    linhas = text.split("\n")
+    text = re.sub(bold,r"<b>\1</b>",text)
+    text = re.sub(italic,r"<i>\1</i>",text)
+    text = re.sub(link,r'\1<a href="\g<url>">\g<texto></a>',text)
+    text = re.sub(image,r'<img src="\g<url>" alt="\g<texto>"/>',text)
+
     return text
 
 def main():
     if len(sys.argv) != 3:
-        print("Uso: python main.py <input.md> <output.html>")
+        #print("Uso: python main.py <input.md> <output.html>")
         sys.exit(1)
 
     input_file = sys.argv[1]
