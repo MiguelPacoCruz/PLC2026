@@ -5,7 +5,7 @@ bold = re.compile(r"\*{2}(.*?)\*{2}")
 italic = re.compile(r"\*{1}(.*?)\*{1}")
 link = re.compile(r"([^!])\[(?P<texto>.*)\]\((?P<url>[\w\/:\.]*)\)")
 image = re.compile(r"!\[(?P<texto>.*)\]\((?P<url>[\w\/:\.]*)\)")
-header = re.compile(r"#\w")
+header = re.compile(r"(#+) (.*)")
 numlist = re.compile(r"^\d\.[\w ,.]*")
 
 def markdown_to_html(text):
@@ -13,8 +13,10 @@ def markdown_to_html(text):
     text = re.sub(italic,r"<i>\1</i>",text)
     text = re.sub(link,r'\1<a href="\g<url>">\g<texto></a>',text)
     text = re.sub(image,r'<img src="\g<url>" alt="\g<texto>"/>',text)
+    
+    text = re.sub(header,lambda m: rf'<h{len(m.group(1))}>{m.group(2)}</h{len(m.group(1))}>',text)
 
-    if re.match(r'^1\. (.*)$',text,re.MULTILINE)is not None:
+    if re.search(r'^1\. (.*)',text,re.MULTILINE)is not None:
         m = True
         text = re.sub(r'1\. (.*)',r'<ol>\n<li>\1</li>',text)
         i = 2
