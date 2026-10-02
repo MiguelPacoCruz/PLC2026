@@ -14,6 +14,16 @@ def markdown_to_html(text):
     text = re.sub(link,r'\1<a href="\g<url>">\g<texto></a>',text)
     text = re.sub(image,r'<img src="\g<url>" alt="\g<texto>"/>',text)
 
+    if re.match(r'^1\. (.*)$',text,re.MULTILINE)is not None:
+        m = True
+        text = re.sub(r'1\. (.*)',r'<ol>\n<li>\1</li>',text)
+        i = 2
+        while (m != None):
+            m = re.match(rf'{i}\.(.*)',text)
+            text = re.sub(rf'{i}\. (.*)',r'<li>\1</li>',text)
+            i += 1
+        text = re.sub(rf'{i}\. (.*)',r'<li>\1</li>\n</ol>',text)
+
     return text
 
 def main():
