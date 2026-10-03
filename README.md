@@ -16,3 +16,4 @@ Cada trabalho encontra-se organizado na sua própria pasta, contendo o respetivo
 ## Lista de resultados
 
 - [TPC1 — Expressão regular para strings binárias sem "011"](./TPC1/NOT011.md)
+- [TPC2 — Conversor de Markdown para HTML](./TPC2/README.md)
